@@ -1,0 +1,25 @@
+/*********************************************************************/
+/*               RDWGET iSeries Scripted Web Retrieval               */
+/*                                                                   */
+/*  CL program RDWGETC02                                             */
+/*    RDWGETSRC migration CL to IFS                                  */
+/*    parms: ifsdir        destination IFS subdirectory              */
+/*                         assumes subdirectory to IFS directory     */
+/*                         with same name as source file             */
+/*********************************************************************/
+             pgm (&ifsdir)
+
+             dcl var(&srclib) type(*char) len(10) value('RDWGET')
+             dcl var(&srcfile) type(*char) len(10) value('RDWGETSRC')
+             dcl var(&ifsdir) type(*char) len(10)
+
+             clrpfm file(QTEMP/SRCMBRS)
+             monmsg msgid(CPF0000)
+
+             dspfd file(&srclib/&srcfile) type(*mbr) +
+               output(*outfile) outfile(QTEMP/SRCMBRS)
+
+            /* copy members to IFS directory */
+             call RDWGETC03 parm(&ifsdir)
+
+             endpgm

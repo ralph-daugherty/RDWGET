@@ -1,0 +1,24 @@
+/*********************************************************************/
+/*               RDWGET iSeries Scripted Web Retrieval               */
+/*                                                                   */
+/*  CL program RDWRTVMSGI                                            */
+/*                                                                   */
+/*    Retrieve message with substitutions by msg id                  */
+/*                                                                   */
+/*    parms: msgf     message file                                   */
+/*           msgid    message id                                     */
+/*           msgdta   substitution data (if defined)                 */
+/*           msgret   retrieved message                              */
+/*********************************************************************/
+             pgm (&msgf &msgid &msgdta &msgret)
+
+             dcl var(&msgf) type(*char) len(10)
+             dcl var(&msgid) type(*char) len(7)
+             dcl var(&msgdta) type(*char) len(32)
+             dcl var(&msgret) type(*char) len(132)
+             dcl var(&retlen) type(*dec) len(5 0) value(132)
+
+             rtvmsg msgid(&msgid) msgf(&msgf) msgdta(&msgdta) +
+                          msg(&msgret) msglen(&retlen)
+
+             endpgm

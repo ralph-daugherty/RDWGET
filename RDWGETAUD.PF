@@ -1,0 +1,24 @@
+     A*****************************************************************
+     A*               RDWGET iSeries Scripted Web Retrieval
+     A*  File RDWGETAUD
+     A*    ordered AUDTRN
+     A*****************************************************************
+     A          R GETAUDR                   TEXT('RDWGET script audit')
+     A            AUDTRN         9  0       TEXT('Audit key')
+     A                                      COLHDG('Trn')
+     A            AUDKEY        10A         TEXT('Script key')
+     A                                      COLHDG('Key')
+     A            AUDJOB        10A         TEXT('Job')
+     A                                      COLHDG('Job')
+     A            AUDUSER       10A         TEXT('User')
+     A                                      COLHDG('User')
+     A            AUDJOBNBR      6A         TEXT('Nbr')
+     A                                      COLHDG('Nbr')
+     A            AUDSTMP         Z         TEXT('Date/Time')
+     A                                      COLHDG('Date/Time')
+     A            AUDCODE        7A         TEXT('Code')
+     A                                      COLHDG('Code')
+     A            AUDMSG       256A         TEXT('Msg')
+     A                                      COLHDG('Msg')
+     A*****************************************************************
+     A          K AUDTRN

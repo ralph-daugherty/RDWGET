@@ -1,0 +1,5 @@
+strpgmexp pgmlvl(*current) signature('RDWAPI V1.00')
+                 export    symbol(rdwCmd)
+                 export    symbol(rdwJobUser)
+                 export    symbol(rdwJobName)
+endpgmexp

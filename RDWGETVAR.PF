@@ -1,0 +1,18 @@
+     A*****************************************************************
+     A*               RDWGET iSeries Scripted Web Retrieval
+     A*  File RDWGETVAR
+     A*    ordered VARKEY
+     A*****************************************************************
+     A          R GETVARR                   TEXT('RDWGET script values')
+     A            VARSCR        10A         TEXT('Script key')
+     A                                      COLHDG('Script')
+     A            VARUSER       14A         TEXT('Script user')
+     A                                      COLHDG('User')
+     A            VARKEY         8A         TEXT('Value key')
+     A                                      COLHDG('Key')
+     A            VARVAL      1024A         TEXT('Value')
+     A                                      COLHDG('Value')
+     A*****************************************************************
+     A          K VARSCR
+     A          K VARUSER
+     A          K VARKEY

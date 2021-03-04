@@ -1,0 +1,30 @@
+     //           RDWGET script TSTINCLUDE
+     get (wrkpath: "HTTP://www.justiceforchandra.com/forums/")
+     find (wrkpath: "login.php")
+     eval &SID = %rdwsubst(wrkpath: "?sid=": %quote)
+     get (wrkpath: "login.php?sid=" + &SID)
+     setvar (form: "username": "testing123")
+     setvar (form: "password": &TESTING1)
+     setvar (form: "login": "Log+in")
+     post (wrkpath: "login.php")
+
+     // include and execute an unrelated script
+     include "TESTCGIGET"
+
+     // continue with calling script to demonstrate multiple scripts executing
+     get (wrkpath: "HTTP://www.justiceforchandra.com/forums/")
+     get (wrkpath: "index.php?sid=" + &SID)
+     get (wrkpath: "viewforum.php?f=44")
+     get (wrkpath: "viewtopic.php?t=4180")
+     get (wrkpath: "posting.php?mode=reply&t=4180")
+     get (wrkpath: "posting.php?mode=topicreview&t=4180")
+     setvar (form: "message": "Test post from IBM i RDWGET with INCLUDE test")
+     setvar (form: "mode": "reply")
+     setvar (form: "sid": &SID)
+     setvar (form: "t": "4180")
+     setvar (form: "post": "Submit")
+     post (wrkpath: "posting.php")
+     get (wrkpath: "login.php?logout=true&sid=" + &SID)
+     end script
+     // check that TESTCGIGET made &TESTOUT1 = &TESTINP1 and that post was made by this script
+ 

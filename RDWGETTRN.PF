@@ -1,0 +1,12 @@
+     A*****************************************************************
+     A*               RDWGET iSeries Scripted Web Retrieval
+     A*  File RDWGETTRN
+     A*    ordered TRNKEY
+     A*****************************************************************
+     A          R GETTRNR                   TEXT('RDWGET script tran')
+     A            TRNKEY        10A         TEXT('Tran key')
+     A                                      COLHDG('Key')
+     A            TRNNBR         9  0       TEXT('Tran nbr')
+     A                                      COLHDG('Nbr')
+     A*****************************************************************
+     A          K TRNKEY

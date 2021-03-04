@@ -1,0 +1,11 @@
+     //           RDWGET script TESTCGIGET
+     eval &TESTOUT1 = " "
+     eval &TESTINP1 = "Text from TESTCGIGET script"
+     get (wrkpath: "HTTP://173.8.38.42:2700/iseries/testcgiget?varscript=" + %rdwscript + "&varuser=" + %rdwuser + "&varkey=TESTINP1") 
+     find (wrkpath: "<html><body>")
+     eval &TESTOUT1 = %rdwsubst(wrkpath: "<p>": "</p>")  //set var value to text between two finds
+     // manually compare with database utility file rdwgetvar text with keys of TESTCGIGET, user, TESTINP1 and TESTOUT1
+     // TESTINP1 was retrieved by rdwget CGIDEV2 program testcgiget (or any web server program programmed similarly to read rdwgetvar file by passed keys)
+     // This script extracts the text returned in the web page and if this test script successful returned text will be same as was set in TESTINP1. 
+     end script
+          

@@ -1,0 +1,213 @@
+/*********************************************************************/
+/*               RDWGET iSeries Scripted Web Retrieval               */
+/*                                                                   */
+/*  CL program RDWGETC01                                             */
+/*    parms: none                                                    */
+/*********************************************************************/
+             pgm
+
+             dcl var(&lib) type(*char) len(10) value('RDWGET')
+             dcl var(&srclib) type(*char) len(10) value('RDWRITES')
+
+             chkobj obj(&lib/RDWGETAUD) objtype(*file)
+             monmsg msgid(CPF9801) exec(do)
+               crtpf file(&lib/RDWGETAUD) +
+                 srcfile(&srclib/RDWGETSRC) +
+                 size(1000000 10000)
+             enddo
+
+             chkobj obj(&lib/RDWGETCFG) objtype(*file)
+             monmsg msgid(CPF9801) exec(do)
+               crtpf file(&lib/RDWGETCFG) +
+                 srcfile(&srclib/RDWGETSRC)
+             enddo
+
+             chkobj obj(&lib/RDWGETTRN) objtype(*file)
+             monmsg msgid(CPF9801) exec(do)
+               crtpf file(&lib/RDWGETTRN) +
+                 srcfile(&srclib/RDWGETSRC)
+             enddo
+
+             chkobj obj(&lib/RDWGETVAR) objtype(*file)
+             monmsg msgid(CPF9801) exec(do)
+               crtpf file(&lib/RDWGETVAR) +
+                 srcfile(&srclib/RDWGETSRC)
+             enddo
+
+             chkobj obj(&lib/RDWGET) objtype(*bnddir)
+             monmsg msgid(CPF9801) exec(do)
+               crtbnddir bnddir(&lib/RDWGET)
+                 addbnddire bnddir(&lib/RDWGET) +
+                   obj((&lib/RDWAPISV))
+                 addbnddire bnddir(&lib/RDWGET) +
+                   obj((&lib/RDWGETSV))
+             enddo
+
+             chkobj obj(&lib/RDWAPISV) objtype(*srvpgm)
+             monmsg msgid(CPF9801) exec(do)
+               crtrpgmod module(&lib/RDWAPISV) +
+                 srcfile(&srclib/RDWGETSRC)
+               crtsrvpgm srvpgm(&lib/RDWAPISV) +
+                 srcfile(&srclib/RDWGETSRC) +
+                 srcmbr(RDWAPIBN)
+             enddo
+
+             chkobj obj(&lib/RDWGETSV) objtype(*srvpgm)
+             monmsg msgid(CPF9801) exec(do)
+               crtrpgmod module(&lib/RDWGETSV) +
+                 srcfile(&srclib/RDWGETSRC)
+               crtsrvpgm srvpgm(&lib/RDWGETSV) +
+                 srcfile(&srclib/RDWGETSRC) +
+                 srcmbr(RDWGETBN)
+             enddo
+
+             chkobj obj(&lib/RDWGET) objtype(*pgm)
+             monmsg msgid(CPF9801) exec(do)
+               crtbndrpg pgm(&lib/RDWGET) +
+                 srcfile(&srclib/RDWGETSRC)
+             enddo
+
+             chkobj obj(&lib/TESTCGIGET) objtype(*pgm)
+             monmsg msgid(CPF9801) exec(do)
+               crtbndrpg pgm(&lib/TESTCGIGET) +
+                 srcfile(&srclib/RDWGETSRC)
+             enddo
+
+             chkobj obj(&lib/RDWRTVMSGI) objtype(*pgm)
+             monmsg msgid(CPF9801) exec(do)
+               crtbndcl pgm(&lib/RDWRTVMSGI) +
+                 srcfile(&srclib/RDWGETSRC) +
+                 actgrp(RDWRITES)
+             enddo
+
+             chkobj obj(&lib/RDWMSGF) objtype(*msgf)
+             monmsg msgid(CPF9801) exec(do)
+               crtmsgf msgf(&lib/RDWMSGF)
+
+               addmsgd msgid(RDW0015) +
+                 msgf(&lib/RDWMSGF) +
+                 msg('&1 script key not found.') +
+                 fmt((*char 10))
+
+               addmsgd msgid(RDW0016) +
+                 msgf(&lib/RDWMSGF) +
+               msg('Max script call stack exceeded with call to &1') +
+                 fmt((*char 10))
+
+               addmsgd msgid(RDW0017) +
+                 msgf(&lib/RDWMSGF) +
+                 msg('Script &1 already in script call stack.') +
+                 fmt((*char 10))
+
+               addmsgd msgid(RDW0018) +
+                 msgf(&lib/RDWMSGF) +
+     msg('Parsing position &1 of &2 exceeded output length.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0019) +
+                 msgf(&lib/RDWMSGF) +
+                 msg('&1 script file not found.') +
+                 fmt((*char 10))
+
+               addmsgd msgid(RDW0020) +
+                 msgf(&lib/RDWMSGF) +
+msg('Unexpected special character parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0021) +
+                 msgf(&lib/RDWMSGF) +
+msg('Field exceeds rdwField length parse error at position &1 of &2') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0022) +
+                 msgf(&lib/RDWMSGF) +
+              msg('Unexpected EOF parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0023) +
+                 msgf(&lib/RDWMSGF) +
+            msg('Unexpected label parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0024) +
+                 msgf(&lib/RDWMSGF) +
+               msg('Unexpected & parse error at position &1 of &2.')  +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0025) +
+                 msgf(&lib/RDWMSGF) +
+          msg('Unsupported opcode parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0026) +
+                 msgf(&lib/RDWMSGF) +
+    msg('Unsupported result field parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0027) +
+                 msgf(&lib/RDWMSGF) +
+            msg('Unexpected slash parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0028) +
+                 msgf(&lib/RDWMSGF) +
+              msg('Unexpected EOL parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0029) +
+                 msgf(&lib/RDWMSGF) +
+           msg('Unexpected string parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0030) +
+                 msgf(&lib/RDWMSGF) +
+                msg('Unexpected + parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0031) +
+                 msgf(&lib/RDWMSGF) +
+          msg('Unexpected operand parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0032) +
+                 msgf(&lib/RDWMSGF) +
+msg('Field exceeds Operand length parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0033) +
+                 msgf(&lib/RDWMSGF) +
+                msg('Unexpected % parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0034) +
+                 msgf(&lib/RDWMSGF) +
+        msg('Unsupported function parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0035) +
+                 msgf(&lib/RDWMSGF) +
+        msg('Unsupported argument parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0036) +
+                 msgf(&lib/RDWMSGF) +
+      msg('Unsupported read state parse error at position &1 of &2.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0037) +
+                 msgf(&lib/RDWMSGF) +
+                 msg('&1 script work file not found,') +
+                 fmt((*char 10))
+
+               addmsgd msgid(RDW0038) +
+                 msgf(&lib/RDWMSGF) +
+               msg('Required string at position &1 of &2 not found.') +
+                 fmt((*char *vary) (*char))
+
+               addmsgd msgid(RDW0039) +
+                 msgf(&lib/RDWMSGF) +
+                 msg('&1 script completed.') +
+                 fmt((*char 10))
+             enddo
+
+             endpgm

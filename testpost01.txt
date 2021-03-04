@@ -1,0 +1,28 @@
+     //           RDWGET script TESTPOST01
+     // login
+     get (wrkpath: "HTTP://www.justiceforchandra.com/forums/")
+     find (wrkpath: "login.php")
+     eval &SID = %rdwsubst(wrkpath: "?sid=": %quote)
+     get (wrkpath: "login.php?sid=" + &SID)
+     setvar (form: "username": "testing123")
+     setvar (form: "password": &TESTING1)
+     setvar (form: "login": "Log+in")
+     post (wrkpath: "login.php")
+
+     // retrieve thread to post on
+     get (wrkpath: "index.php?sid=" + &SID)
+     get (wrkpath: "viewforum.php?f=44")
+     get (wrkpath: "viewtopic.php?t=4180")
+     get (wrkpath: "posting.php?mode=reply&t=4180")
+     get (wrkpath: "posting.php?mode=topicreview&t=4180")
+
+     // post
+     setvar (form: "message": "Test post from IBM i RDWGET")
+     setvar (form: "mode": "reply")
+     setvar (form: "sid": &SID)
+     setvar (form: "t": "4180")
+     setvar (form: "post": "Submit")
+     post (wrkpath: "posting.php")
+
+     // logout
+     get (wrkpath: "login.php?logout=true&sid=" + &SID)

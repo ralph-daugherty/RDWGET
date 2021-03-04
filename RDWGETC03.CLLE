@@ -1,0 +1,28 @@
+/*********************************************************************/
+/*               RDWGET iSeries Scripted Web Retrieval               */
+/*                                                                   */
+/*  CL program RDWGETC03                                             */
+/*    RDWGET source migration CL to IFS                              */
+/*    parms: ifsdir        destination IFS directory                 */
+/*                         assumes subdirectory to IFS directory     */
+/*                         with same name as source file             */
+/*********************************************************************/
+             pgm (&ifsdir)
+
+             dcl var(&ifsdir) type(*char) len(10)
+
+             dclf file(QTEMP/SRCMBRS)
+
+             dowhile '1'
+               rcvf
+               monmsg msgid(CPF0864) exec(leave)
+               cpytostmf frommbr('/qsys.lib/' *tcat &mblib *tcat +
+                          '.lib/' *tcat &mbfile *tcat '.file/' +
+                          *tcat &mbname *tcat '.mbr') tostmf('/' +
+                          *tcat &mbfile *tcat '/' *tcat &ifsdir +
+                          *tcat '/' *tcat &mbname *tcat '.' *tcat +
+                          &mbseu2) stmfcodpag(*pcascii)
+               monmsg msgid(CPF0000) exec(leave)
+             enddo
+
+             endpgm

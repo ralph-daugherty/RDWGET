@@ -1,0 +1,2 @@
+     //           RDWGET script TESTDOWNGC
+    get (outpath: "HTTP://www.rdwrites.com/rd/pcpin.doc")
